@@ -1,6 +1,7 @@
 #Setting OpenPose parameters
 import cv2
 import numpy as np
+import os
 from openpose import pyopenpose as op
 
 HEAD = 0
@@ -26,7 +27,7 @@ def set_params():
         params["num_gpu_start"] = 0
         params["disable_blending"] = False
         # Ensure you point to the correct path where models are located
-        params["model_folder"] = "../../models/"
+        params["model_folder"] = os.path.expanduser("~/openpose/models/")
         return params
 
 def main():
