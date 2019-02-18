@@ -519,16 +519,7 @@ void Creature::_rxSoundCageHandle(uint8_t len, uint8_t* payload) {
   // Serial.println("_rxSoundCageHandle");
   for (uint8_t i = 0; i < p.addrs_len; i++) {
     if (p.addrs[i] == _addr) {
-      /*Serial.println("Midi::setSound");
-      Serial.println("test");*/
-      if (p.instrument == 1)
-        Serial.print("instrument = 1 ");
-      if (p.loop == 0)
-        Serial.println("loop = 0 ");
-      if (p.transpose == 10)
-        Serial.println("transpose = 10");
-      if (p.melody_number == 1)
-        Serial.println("melody_number = 1");
+      Serial.println("Midi::setSound");
       Midi::setSound(p.melody_number, p.loop, p.transpose, 0, 0, p.instrument);
       Serial.println("Finished");
       return;
