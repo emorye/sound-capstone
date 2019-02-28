@@ -4,7 +4,7 @@
 
 Main m;
 
-void setup() {
+void setup() { 
   m.setup();
 }
 

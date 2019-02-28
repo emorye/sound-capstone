@@ -5,6 +5,7 @@
 #include <Wire.h> // ?
 
 #include "Oled.h"
+#include "Speaker.h"
 
 #define VREF 3.3 // ?
 
@@ -19,7 +20,8 @@ class Main {
   ~Main(); // Main Destructor. Also doesn't do anything atm.
 
   int i;
-  Oled oled = Oled();
+  Oled *oled;
+  Speaker *speaker;
 
   // Run after construction but before loop.
   void setup();
