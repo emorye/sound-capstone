@@ -1,4 +1,5 @@
 #Setting OpenPose parameters
+from webcamvideostream import WebcamVideoStream
 import cv2
 import serial
 import numpy as np
@@ -7,7 +8,6 @@ import time
 
 from openpose import pyopenpose as op
 
-# ttyName = '/dev/ttyACM0'
 
 HEAD = 0
 CHEST = 1
@@ -127,7 +127,9 @@ def main(ser):
     opWrapper.start()
 
     # Opening OpenCV stream
-    stream = cv2.VideoCapture(1)
+    #stream = cv2.VideoCapture(1)
+    stream = WebcamVideoStream(src=1)
+    stream.start()
 
     prev_keypoints = None
     pose_detectors = [left_hand_raised, right_hand_raised, 
@@ -143,7 +145,8 @@ def main(ser):
         count += 1
         datum = op.Datum()
 
-        ret,img = stream.read()
+        #ret,img = stream.read()
+        img = stream.read()
         datum.cvInputData = img
         
         # Send the data to open pose
@@ -158,16 +161,18 @@ def main(ser):
                     poses.append(i)
 
 	print poses
-	for pose in []: #poses:
-            if pose not in pose_count:
-                pose_count[pose] = 0
-	    if pose in pose_count and pose_count[pose] == 0:
-                pose_count[pose] = 3
-		uid = 18 + pose % 2
-		print "MAKE SOUND " + str(pose)
-	        ser.write(b'sound {} {}\n'.format(uid, pose + 1))
-                ser.flush()
-            pose_count[pose] -= 1
+        if ser is not None:
+            # TODO: fix hacky mapping from poses to sounds
+            for pose in poses:
+                if pose not in pose_count:
+                    pose_count[pose] = 0
+                if pose in pose_count and pose_count[pose] == 0:
+                    pose_count[pose] = 3
+                    uid = 18 + pose % 2
+                    print "MAKE SOUND " + str(pose)
+                    ser.write(b'sound {} {}\n'.format(uid, pose + 1))
+                    ser.flush()
+                pose_count[pose] -= 1
 
 
         overlay = cv2.addWeighted(img, 0.9, datum.cvOutputData, 0.5, 0)
@@ -178,6 +183,7 @@ def main(ser):
         key = cv2.waitKey(1)
         
         if key==ord('q'):
+            stream.stop()
             break
         
     print "freq: " + str(count / (time.time() - curtime))
@@ -185,5 +191,10 @@ def main(ser):
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    ser = None #serial.Serial(ttyName)
+    run_serial = False
+    if (run_serial):
+        ttyName = '/dev/ttyACM0'
+        ser = serial.Serial(ttyName)
+    else:
+        ser = None
     main(ser)
