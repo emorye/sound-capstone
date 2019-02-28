@@ -26,22 +26,17 @@ void Main::setup() {
   speaker->play("TRACK002.mp3");
   speaker->midi();
   speaker->zeldasLullaby(127);
-
-  // Arbitrarily turn on the LED boi.
-  pinMode(LED_PIN, OUTPUT);
-
   
 }
 
 void Main::loop() {
-  
-  digitalWrite(LED_PIN, HIGH);
+
   oled->present("Hello!\n\n\nLoop: " + String(i++));
 
   if(radio->poll()){
     uint8_t buf [RH_RF69_MAX_MESSAGE_LEN] = {0};
     radio->rx(buf, sizeof(buf));
-    speaker->zeldasLullaby(127);
+    if(buf[0] == 69) speaker->zeldasLullaby(127);
   }
 
 }

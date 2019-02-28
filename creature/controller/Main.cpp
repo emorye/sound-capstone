@@ -20,21 +20,25 @@ void Main::setup() {
   
   oled->init();
   radio->init();
-  
 
-  // Arbitrarily turn on the LED boi.
-  pinMode(LED_PIN, OUTPUT);
 
-  uint8_t msg[2] = {1, 2};
-  radio->tx(msg, 2);
-
-  
 }
 
 void Main::loop() {
   
   digitalWrite(LED_PIN, HIGH);
   oled->present("Hello!\n\n\nLoop: " + String(i++));
+
+  if(Serial.available()){
+    String cmd = Serial.readStringUntil('\n');
+    cmd.toLowerCase();
+    if(cmd.equals("zelda")){
+      // Send some arbitrary packet
+      uint8_t msg[1] = {69};
+      radio->tx(msg, 1);
+    }
+  }
+
 
 }
 
