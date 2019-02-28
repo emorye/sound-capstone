@@ -1,46 +1,49 @@
 #include "Main.h"
 #include "Debug.h"
 
-#include <cmath>
-
-
 Main::Main() {
   i = 0;
 }
 
-void Main::setup() {
-  Serial.begin(115200);
-  delay(3000);
-  
-  Serial.print(F("Initializing"));
+// Adafruit_VS1053_FilePlayer musicPlayer = Adafruit_VS1053_FilePlayer(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARDCS);
 
-  delay(100);
+void Main::setup() {
+
+  // Init Serial and wait for it to finish initializing
+  Serial.begin(115200);
+  delay(1000);
+
+  oled = new Oled();
+  speaker = new Speaker();
+  radio = new Radio();
+  
+  speaker->init();
+  oled->init();
+  radio->init();
+  
+  // Speaker Stuff
+  speaker->setVolume(70);
+  speaker->play("TRACK002.mp3");
+  speaker->midi();
+  speaker->zeldasLullaby(127);
+
+  // Arbitrarily turn on the LED boi.
   pinMode(LED_PIN, OUTPUT);
 
-  oled.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3C (for the 128x32)
-  oled.display();
-  oled.clearDisplay();
-  oled.init();
-  oled.setBatteryVisible(false);
-  updateDisplay();
+  
 }
 
 void Main::loop() {
   
   digitalWrite(LED_PIN, HIGH);
-  
-  updateDisplay();
-}
+  oled->present("Hello!\n\n\nLoop: " + String(i++));
 
-void Main::updateDisplay() {
-  
-  oled.clearDisplay();
+  if(radio->poll()){
+    uint8_t buf [RH_RF69_MAX_MESSAGE_LEN] = {0};
+    radio->rx(buf, sizeof(buf));
+    speaker->zeldasLullaby(127);
+  }
 
-  oled.setCursor(0, 0);
-  oled.print("Hello!");
-  oled.setCursor(0, 24);
-  oled.print("Tick " + String(i++));
-  oled.display();
 }
 
 Main::~Main() {

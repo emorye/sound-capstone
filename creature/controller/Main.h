@@ -6,6 +6,7 @@
 
 #include "Oled.h"
 #include "Speaker.h"
+#include "Radio.h"
 
 #define VREF 3.3 // ?
 
@@ -21,7 +22,7 @@ class Main {
 
   int i;
   Oled *oled;
-  Speaker *speaker;
+  Radio *radio;
 
   // Run after construction but before loop.
   void setup();

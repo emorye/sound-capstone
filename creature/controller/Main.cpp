@@ -15,24 +15,19 @@ void Main::setup() {
   Serial.begin(115200);
   delay(1000);
 
-
   oled = new Oled();
-  speaker = new Speaker();
+  radio = new Radio();
   
-  speaker->init();
-
-  Serial.write("Hello!");
-
   oled->init();
-  delay(1000);
+  radio->init();
   
+
   // Arbitrarily turn on the LED boi.
   pinMode(LED_PIN, OUTPUT);
 
-  speaker->setVolume(70);
-  speaker->play("TRACK002.mp3");
-  speaker->midi();
-  speaker->zeldasLullaby(20);
+  uint8_t msg[2] = {1, 2};
+  radio->tx(msg, 2);
+
   
 }
 
