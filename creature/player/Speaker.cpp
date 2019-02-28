@@ -35,7 +35,7 @@ int Speaker::init(){
     
     musicPlayer.softReset(); // Reset from the last time the speaker was used.
 
-    musicPlayer.sineTest(0x44, 5); // Play a tetst sound
+    musicPlayer.sineTest(0x44, 5); // Play a test sound
 
     musicPlayer.useInterrupt(VS1053_FILEPLAYER_PIN_INT);  // DREQ int
 
@@ -113,6 +113,13 @@ void Speaker::playNote(int channel, int pitch, int velocity, int duration){
   releaseNote(channel, pitch, velocity);
 }
 
+void Speaker::sineTest(){
+    if(midiMode) {
+      mp3();
+      midiMode = false;
+    }
+    musicPlayer.sineTest(0x44, 5); // Play a test sound
+}
     
 void Speaker::zeldasLullaby(int velocity){
   int notes[13] =     {71, 74, 69, 67, 69, 71, 74, 69, 71, 74, 81, 79, 74};

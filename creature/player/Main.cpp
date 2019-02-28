@@ -5,8 +5,6 @@ Main::Main() {
   i = 0;
 }
 
-// Adafruit_VS1053_FilePlayer musicPlayer = Adafruit_VS1053_FilePlayer(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARDCS);
-
 void Main::setup() {
 
   // Init Serial and wait for it to finish initializing
@@ -22,10 +20,10 @@ void Main::setup() {
   radio->init();
   
   // Speaker Stuff
-  speaker->setVolume(70);
+  speaker->setVolume(40);
   speaker->play("TRACK002.mp3");
   speaker->midi();
-  speaker->zeldasLullaby(127);
+  // speaker->zeldasLullaby(127);
   
 }
 
@@ -37,6 +35,7 @@ void Main::loop() {
     uint8_t buf [RH_RF69_MAX_MESSAGE_LEN] = {0};
     radio->rx(buf, sizeof(buf));
     if(buf[0] == 69) speaker->zeldasLullaby(127);
+    if(buf[0] == 70) speaker->sineTest();
   }
 
 }

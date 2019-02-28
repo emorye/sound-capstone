@@ -49,7 +49,6 @@ class Speaker {
     // Switch to midi mode and mp3 mode respectively
     void midi();
     void mp3();
-
     
     // Set the midi instrument, and its volume
     void setInstrument(int channel, int instrument);
@@ -63,6 +62,9 @@ class Speaker {
     
     // Example to play Zelda's Lullaby
     void zeldasLullaby(int velocity);
+
+    // Test sine beep
+    void sineTest();
 
     
   private:
