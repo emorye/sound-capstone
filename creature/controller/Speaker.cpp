@@ -8,7 +8,8 @@
 // Permission to reproduce here granted by VLSI solution.
 //
 
-void midiCmd(uint8_t bit1, uint8_t bit2, uint8_t bit3) {
+void Speaker::midiCmd(uint8_t bit1, uint8_t bit2, uint8_t bit3) {
+  if (!midiMode) midi();
   VS1053_MIDI.write(bit1);
   VS1053_MIDI.write(bit2);  
   VS1053_MIDI.write(bit3);
@@ -87,15 +88,16 @@ void Speaker::mp3(){
 }
 
 void Speaker::setInstrument(int channel, int instrument){
-    instrument--; // page 32 has instruments starting with 1 not 0 :(
+  if (!midiMode) midi();
+  instrument--; // page 32 has instruments starting with 1 not 0 :(
   
-    VS1053_MIDI.write(MIDI_CHAN_PROGRAM | channel);  
-    delay(10);
-    VS1053_MIDI.write(instrument);
-    delay(10);
+  VS1053_MIDI.write(MIDI_CHAN_PROGRAM | channel);  
+  delay(10);
+  VS1053_MIDI.write(instrument);
+  delay(10);
 }
 
-void Speaker::setInstrumentVolume(int channel, int volume){
+void Speaker::setInstrumentVolume(int channel, int volume) {
   midiCmd(MIDI_CHAN_MSG | channel, MIDI_CHAN_VOLUME, volume);
 }
 
@@ -116,7 +118,6 @@ void Speaker::playNote(int channel, int pitch, int velocity, int duration){
 void Speaker::sineTest(){
     if(midiMode) {
       mp3();
-      midiMode = false;
     }
     musicPlayer.sineTest(0x44, 5); // Play a test sound
 }

@@ -71,6 +71,7 @@ class Speaker {
     Adafruit_VS1053_FilePlayer musicPlayer = Adafruit_VS1053_FilePlayer(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARDCS);
     bool midiMode;
     int lastIntstrument;
+    void midiCmd(uint8_t bit1, uint8_t bit2, uint8_t bit3);
 
     
 

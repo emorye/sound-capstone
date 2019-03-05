@@ -26,7 +26,9 @@ class Main {
   Speaker *speaker;
   Radio *radio;
 
-  int i;
+  int i; // Loop number
+  int txp; // Number of tx packets;
+  int rxp; // Number of rx packets;
 
   // Run after construction but before loop.
   void setup();
