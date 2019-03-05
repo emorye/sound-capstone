@@ -25,7 +25,7 @@ void Main::setup() {
   speaker->setVolume(0);
   speaker->play("TRACK002.mp3");
   speaker->midi();
-  speaker->zeldasLullaby(127);
+//  speaker->zeldasLullaby(127);
   
 }
 
@@ -40,6 +40,7 @@ void Main::loop() {
     if(buf[0] == 69) speaker->zeldasLullaby(127);
     if(buf[0] == 70) speaker->sineTest();
     if(buf[0] == 4) speaker->pressNote(buf[1], buf[2], buf[3]);
+    if(buf[0] == 5) speaker->releaseNote(buf[1], buf[2], buf[3]);
     oled->present(String(buf[0]) + " "+String(buf[1]) + " "+String(buf[2]) + " "+String(buf[3]));
   }
 

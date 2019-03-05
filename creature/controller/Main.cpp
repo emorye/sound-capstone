@@ -50,6 +50,15 @@ void Main::loop() {
        oled->present(String(msg[0]) + ' ' + String(msg[1]) + ' ' + String(msg[2]) + ' ' + String(msg[3]));
       radio->tx(msg, 4);
     }
+    if(cmd.equals("releasenote")){
+      //int channel, int pitch, int velocity
+      uint8_t msg[4] = {5, 0, 0, 0};
+      msg[1] = Serial.readStringUntil(' ').toInt();
+      msg[2] = Serial.readStringUntil(' ').toInt();
+      msg[3] = Serial.readStringUntil('\n').toInt();
+       oled->present(String(msg[0]) + ' ' + String(msg[1]) + ' ' + String(msg[2]) + ' ' + String(msg[3]));
+      radio->tx(msg, 4);
+    }
   }
 
 

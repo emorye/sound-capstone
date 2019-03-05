@@ -2,8 +2,8 @@ import mido
 import serial
 import threading
 
-mid = mido.MidiFile('BEAT1R.mid')
-ser = serial.Serial('/dev/cu.usbmodem14301')
+mid = mido.MidiFile('mario.mid')
+ser = serial.Serial('/dev/cu.usbmodem14101')
 
 msgs = []
 
@@ -11,25 +11,26 @@ msgs = []
 for i, track in enumerate(mid.tracks):
     print('Track {}: {}'.format(i, track.name))
     for msg in track:
-      if msg.type == "note_on":
+      if (msg.type == "note_on" or msg.type == "note_off") and i == 2:
         msgs.append(msg)
-        # print(msg)
+        print(msg)
 
-def sendnote(channel, note, velocity):
-  string = 'pressNote ' + str(channel) + ' ' + str(note) + ' ' + str(velocity) + '\n'
+def sendnote(event, channel, note, velocity):
+  string = ""
+  if event == "note_on":
+    string = 'pressNote ' + str(channel) + ' ' + str(note) + ' ' + str(velocity) + '\n'
+  elif event == "note_off":
+    string = 'releaseNote ' + str(channel) + ' ' + str(note) + ' ' + str(velocity) + '\n'
   ser.write(string.encode())
-  print(string)
-  print(type(string.encode()))
-  print(type(string.encode()))
   if len(msgs) > 0:
     message = msgs.pop(0)
     print(message.time)
-    timer = threading.Timer(message.time/200, sendnote, (message.channel, message.note, message.velocity))
+    timer = threading.Timer(message.time/6000, sendnote, (message.type, message.channel, message.note, message.velocity))
     timer.start()
 
-print (msgs)
+# print (msgs)
 message = msgs.pop(0)
-timer = threading.Timer(message.time/200, sendnote, (message.channel, message.note, message.velocity))
+timer = threading.Timer(message.time/6000, sendnote, (message.type, message.channel, message.note, message.velocity))
 timer.start()
 
 # ser.write(b'sine ')
