@@ -1,9 +1,10 @@
 #Setting OpenPose parameters
 from webcamvideostream import WebcamVideoStream
+import ctrl
 import cv2
-import serial
 import numpy as np
 import os
+import threading
 import time
 
 from openpose import pyopenpose as op
@@ -118,7 +119,31 @@ def right_arm_straight(keypoints, prev):
     else:
         return False
 
-def main(ser, cc_t):
+# handle both hands:
+# both hands up -> play melody a
+# distance between hands determines velocity
+# if your hands are together and down, where they end up, signifies which creature to play melody a
+# 
+
+def left_hand_ctrl(cc):
+    m = ctrl.MEL1()
+
+    def step(keypoints, prev):
+        m.start()
+        offset = keypoints[LEFT_HAND][1] * 20 + 50
+        velocity = int(keypoints[RIGHT_HAND][1] * 100)
+        print "VELOCITY: " + str(velocity)
+        m.set_transpose(offset)
+        m.set_velocity(velocity)
+        if m.done():
+            m.restart()
+
+    cc.add_melody(m)
+
+    return step
+
+
+def main(cc):
     params = set_params()
 
     # Constructing OpenPose object allocates GPU memory
@@ -139,13 +164,14 @@ def main(ser, cc_t):
     count = 0
     curtime = time.time()
 
-    pose_count = {}
+    cc.start()
+
+    lhc = left_hand_ctrl(cc)
 
     while True:
         count += 1
         datum = op.Datum()
 
-        #ret,img = stream.read()
         img = stream.read()
         datum.cvInputData = img
 
@@ -156,24 +182,14 @@ def main(ser, cc_t):
         keypoints = datum.poseKeypoints
         if keypoints is not None and keypoints.size > 1:
             keypoints = keypoints[0]
-            for i, pd in enumerate(pose_detectors):
-		if pd(keypoints, prev_keypoints):
-                    poses.append(i)
 
-	print poses
-        if True: #ser is not None:
-            # TODO: fix hacky mapping from poses to sounds
-            for pose in poses:
-                if pose not in pose_count:
-                    pose_count[pose] = 0
-                if pose in pose_count and pose_count[pose] == 0:
-                    pose_count[pose] = 3
-                    uid = 18 + pose % 2
-                    print "MAKE SOUND " + str(pose)
-                    print b'sound {} {}\n'.format(uid, pose + 1) # ser.write(
-                    # ser.flush()
-                pose_count[pose] -= 1
+            lhc(keypoints, prev_keypoints)
+            # left_hand = keypoints[LEFT_HAND][1] * 0.01
+            # right_hand = 
+            # m1 = ctrl.MEL1()
 
+            # cc.set_tempo_scale(left_hand)
+            # cc.set_offset(right_hand)
 
         overlay = cv2.addWeighted(img, 0.9, datum.cvOutputData, 0.5, 0)
         cv2.imshow('Human Pose Estimation', overlay)
@@ -189,10 +205,10 @@ def main(ser, cc_t):
     print "freq: " + str(count / (time.time() - curtime))
     stream.release()
     cv2.destroyAllWindows()
+    cc.join()
 
 if __name__ == '__main__':
-    cc = ctrl.CreatureController('ACM', 1000, 'note_on', 1, -1, 60, 10, 0, 1000)
-    cc_t = threading.Thread(target=cc.loop)
-    cc_t.start()
-    cc_t.join()
-    main(ser, cc_t)
+    cc = ctrl.CreatureController(port='/dev/ttyACM0',
+                                 event='note_on',
+                                 channel=1)
+    main(cc)
