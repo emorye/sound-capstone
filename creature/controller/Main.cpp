@@ -19,6 +19,9 @@ void Main::setup() {
   oled->init();
   radio->init();
 
+  uint8_t syncwords[] = {0x45, 0x67};
+  radio->resync(syncwords);
+
 
 }
 
@@ -41,7 +44,7 @@ void Main::loop() {
       uint8_t msg[1] = {70};
       radio->tx(msg, 1);
     }
-    if(cmd.equals("pressnote")){
+    if(cmd.equals("note_on")){
       //int channel, int pitch, int velocity
       uint8_t msg[4] = {4, 0, 0, 0};
       msg[1] = Serial.readStringUntil(' ').toInt();
@@ -50,9 +53,18 @@ void Main::loop() {
        oled->present(String(msg[0]) + ' ' + String(msg[1]) + ' ' + String(msg[2]) + ' ' + String(msg[3]));
       radio->tx(msg, 4);
     }
-    if(cmd.equals("releasenote")){
+    if(cmd.equals("note_off")){
       //int channel, int pitch, int velocity
       uint8_t msg[4] = {5, 0, 0, 0};
+      msg[1] = Serial.readStringUntil(' ').toInt();
+      msg[2] = Serial.readStringUntil(' ').toInt();
+      msg[3] = Serial.readStringUntil('\n').toInt();
+       oled->present(String(msg[0]) + ' ' + String(msg[1]) + ' ' + String(msg[2]) + ' ' + String(msg[3]));
+      radio->tx(msg, 4);
+    }
+    if(cmd.equals("instrument")){
+      //int channel, int pitch, int velocity
+      uint8_t msg[4] = {6, 0, 0, 0};
       msg[1] = Serial.readStringUntil(' ').toInt();
       msg[2] = Serial.readStringUntil(' ').toInt();
       msg[3] = Serial.readStringUntil('\n').toInt();

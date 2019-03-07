@@ -18,6 +18,9 @@ class Radio {
     // Initialize the Radio
     void init();
 
+    // Change sync words
+    void resync(const uint8_t *syncword);
+
     // Send a message over the radio
     void tx(uint8_t *msg, uint8_t len);
 

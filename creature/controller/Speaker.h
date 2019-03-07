@@ -59,6 +59,9 @@ class Speaker {
 
     void pressNote(int channel, int pitch, int velocity);
     void releaseNote(int channel, int pitch, int velocity);
+
+    // Send a raw midi command
+    void midiRaw(const uint8_t *msg, uint8_t len);
     
     // Example to play Zelda's Lullaby
     void zeldasLullaby(int velocity);

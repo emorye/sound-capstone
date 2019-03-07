@@ -15,6 +15,13 @@ void Speaker::midiCmd(uint8_t bit1, uint8_t bit2, uint8_t bit3) {
   VS1053_MIDI.write(bit3);
 }
 
+void Speaker::midiRaw(const uint8_t *msg, uint8_t len) {
+  if (!midiMode) midi();
+  for (int i = 0; i < len; i++){
+    VS1053_MIDI.write(msg[i]);
+  }
+}
+
 
 Speaker::Speaker(){
   midiMode = false;

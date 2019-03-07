@@ -18,6 +18,10 @@ void Radio::init(){
   rf69.setEncryptionKey(key);
 }
 
+void Radio::resync(const uint8_t *syncword){
+  rf69.setSyncWords(syncword, 2);
+}
+
 void Radio::tx(uint8_t *msg, uint8_t len){
   rf69.send(msg, len);
   rf69.waitPacketSent();

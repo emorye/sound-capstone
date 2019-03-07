@@ -21,6 +21,9 @@ void Main::setup() {
   oled->init();
   radio->init();
   
+  uint8_t syncwords[] = {0x45, 0x67};
+  radio->resync(syncwords);
+  
   // Speaker Stuff
   speaker->setVolume(0);
   speaker->play("TRACK002.mp3");
