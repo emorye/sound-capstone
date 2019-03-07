@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <Adafruit_VS1053.h>
+#include "Oled.h"
 
 #define VS1053_RESET   -1     // VS1053 reset pin (not used!)
 #define VS1053_CS       6     // VS1053 chip select pin (output)
@@ -62,6 +63,7 @@ class Speaker {
 
     // Send a raw midi command
     void midiRaw(const uint8_t *msg, uint8_t len);
+    void midiRawCancel(void);
     
     // Example to play Zelda's Lullaby
     void zeldasLullaby(int velocity);
@@ -76,7 +78,9 @@ class Speaker {
     int lastIntstrument;
     void midiCmd(uint8_t bit1, uint8_t bit2, uint8_t bit3);
 
-    
+    uint8_t notebuf[8]= {0};
+    uint8_t channelbuf[8]= {0};
+    uint8_t bufptr = 0;
 
 };
 #endif  // _RADIO_H_

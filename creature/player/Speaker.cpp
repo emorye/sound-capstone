@@ -15,7 +15,18 @@ void Speaker::midiCmd(uint8_t bit1, uint8_t bit2, uint8_t bit3) {
   VS1053_MIDI.write(bit3);
 }
 
+void Speaker::midiRawCancel(void) {
+  for(int i=0; i < 8; i++){
+    releaseNote(channelbuf[i], notebuf[i], 0);
+  }
+}
+
 void Speaker::midiRaw(const uint8_t *msg, uint8_t len) {
+  if ((msg[0] & 0xF0) == MIDI_NOTE_ON){
+    channelbuf[bufptr] = (msg[0] & 0x0F);
+    notebuf[bufptr] = msg[1];
+    bufptr = (bufptr + 1) % 8;
+  }
   if (!midiMode) midi();
   for (int i = 0; i < len; i++){
     VS1053_MIDI.write(msg[i]);

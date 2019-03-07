@@ -9,6 +9,10 @@ for i, track in enumerate(mid.tracks):
     print('Track {}: {}'.format(i, track.name))
     for msg in track:
       # if not msg.type == "note_on" and not msg.type == "note_off":
-      if i==1:
-        # print("  " + msg.type)
-        print("  " + str(msg))
+      if i==1 or True:
+        if ("channel" in dir(msg)):
+          if not msg.channel == 0:
+            print("contains channel " + str(msg.channel) + " in track " + str(i))
+        if msg.type == "program_change":
+          # print(msg.bytes())
+          pass

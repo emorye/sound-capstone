@@ -39,6 +39,10 @@ class Main {
  private:
   /** Measures battery voltage and updates OLED */
   void updateDisplay();
+  uint8_t syncwords[2] = {0x66, 0x66};
+
+  // Error correction
+  uint8_t errct = 255;
 
 };
 
