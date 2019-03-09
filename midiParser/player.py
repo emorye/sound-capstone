@@ -26,6 +26,7 @@ for i, track in enumerate(mid.tracks):
         else:
           msgs[i] = [[m]]
 
+
 # print(msgs)
 def send_note(arg):
   idx = arg

@@ -10,7 +10,7 @@ Main::Main() {
 void Main::setup() {
 
   // Init Serial and wait for it to finish initializing
-  Serial.begin(115200);
+  Serial.begin(500000);
   delay(1000);
 
   oled = new Oled();

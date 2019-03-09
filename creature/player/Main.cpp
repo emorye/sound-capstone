@@ -10,7 +10,7 @@ Main::Main() {
 void Main::setup() {
 
   // Init Serial and wait for it to finish initializing
-  Serial.begin(115200);
+  Serial.begin(50000);
   delay(1000);
 
   oled = new Oled();
@@ -21,14 +21,14 @@ void Main::setup() {
   oled->init();
   
   radio->init();
-  radio->resync(syncwords);
+  radio->resync(sw[controllernum]);
   
   // Speaker Stuff
-  speaker->setVolume(30);
+  speaker->setVolume(0);
   speaker->play("TRACK002.mp3");
   speaker->midi();
 //  speaker->zeldasLullaby(127);
-  oled->present("Hello!\nSyncword: " + String(syncwords[0]) + ", " + String(syncwords[1]));
+  oled->present("Hello!\nSyncword: 0x" + String(sw[controllernum][0], HEX) + ", 0x" + String(sw[controllernum][1], HEX));
   
 }
 
