@@ -16,8 +16,10 @@ void Speaker::midiCmd(uint8_t bit1, uint8_t bit2, uint8_t bit3) {
 }
 
 void Speaker::midiRawCancel(void) {
-  for(int i=0; i < 8; i++){
-    releaseNote(channelbuf[i], notebuf[i], 0);
+  uint8_t cancel_buf[] = {0x00, 0x7b, 0x7b};
+  for(uint8_t i=0; i < 16; i++){
+    cancel_buf[0] = 0xB0 | i;
+    midiRaw(buff, 3);
   }
 }
 
