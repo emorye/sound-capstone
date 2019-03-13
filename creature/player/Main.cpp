@@ -28,7 +28,7 @@ void Main::setup() {
   speaker->play("TRACK002.mp3");
   speaker->midi();
 //  speaker->zeldasLullaby(127);
-  oled->present("Hello!\nSyncword: 0x" + String(sw[controllernum][0], HEX) + ", 0x" + String(sw[controllernum][1], HEX));
+  oled->present("Creature Num: " + String(controllernum) + "\nVersion: " + String(_version) + "\nSyncword: 0x" + String(sw[controllernum][0], HEX) + ", 0x" + String(sw[controllernum][1], HEX));
   
 }
 
@@ -44,6 +44,7 @@ void Main::loop() {
     if(buf[0] == 70) speaker->sineTest();
     if(buf[0] == 4) speaker->pressNote(buf[1], buf[2], buf[3]);
     if(buf[0] == 5) speaker->releaseNote(buf[1], buf[2], buf[3]);
+    if(buf[0] == 6) speaker->midiRawCancel();
     if(buf[0] == 99){
 //      oled->present(String(errct) + " " + String(buf[1]-errct));
       if(buf[1]-errct > 1){

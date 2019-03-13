@@ -21,17 +21,17 @@ void Main::setup() {
 
   radio->resync(syncwords);
 
-
+  oled->present("Starting Controller");
 }
 
 void Main::loop() {
   
   digitalWrite(LED_PIN, HIGH);
-//  oled->present("Controller!\n\n\nLoop: " + String(i++));
+  // oled->present("Controller!\n\n\nLoop: " + String(i++));
 
   while(Serial.available()){
     String cmd = Serial.readStringUntil(' ');
-//    oled->present(cmd);
+    // oled->present(cmd);
     cmd.toLowerCase();
     if(cmd.equals("raw")){
       //int channel, int pitch, int velocity
@@ -59,10 +59,19 @@ void Main::loop() {
       }
       oled->present(String(client) + " " + x);
       radio->tx(msg, ptr);
+    } if (cmd.equals("zero")) {
+      uint8_t msg[2] = {};
+      msg[0] = 6;
+      for (int i = 0; i < 16; i++) {
+        if (i != lastClient){
+          radio->resync(sw[i]);
+          lastClient = i;
+        }
+        radio->tx(msg, 1);
+      }
+      oled->present("Zero all");
     }
   }
-
-
 }
 
 Main::~Main() {
