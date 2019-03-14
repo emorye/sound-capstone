@@ -8,9 +8,9 @@ mid = mido.MidiFile('midi/marioOverworld.mid')
 time_div = 300
 inst_offset = {1: 0, 2: 1, 3: 2, 4: 3, 5: 4, 6: 5}
 
-# mid = mido.MidiFile('midi/marioGustyGarden.mid')
-# time_div = 250
-# inst_offset = {4: 0, 13: 1}
+mid = mido.MidiFile('midi/marioGustyGarden.mid')
+time_div = 250
+inst_offset = {4: 0, 13: 1}
 
 ser = serial.Serial('/dev/cu.usbmodem14301')
 

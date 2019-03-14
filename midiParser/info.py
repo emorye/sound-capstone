@@ -3,10 +3,10 @@ import serial
 import threading
 
 
-mid = mido.MidiFile('midi/maria1.mid')
+# mid = mido.MidiFile('midi/fantasy.mid')
 # mid = mido.MidiFile('midi/botwPrincesidon.mid')
 # mid = mido.MidiFile('midi/botwRiding.mid')
-# mid = mido.MidiFile('midi/marioGustyGarden.mid')
+mid = mido.MidiFile('midi/marioGustyGarden.mid')
 
 for i, track in enumerate(mid.tracks):
     print('Track {}: {}'.format(i, track.name))
