@@ -6,8 +6,8 @@ import sys
 
 # mid = mido.MidiFile('midi/fantasy.mid')
 # state = {"time_div": 750, "vol_scale": 1}
-# inst_offset = {1: 2,2: 2,3: 2,4: 2,5: 2,6: 2,7: 2,8: 2,9: 2,10: 2,11: 2,12: 2,13: 2,14: 2,15: 2,16: 2}
-# # inst_offset = {1: 2, 3: 2, 5: 2, 10: 2, 13: 2, 14: 2}
+# # inst_offset = {1: 2,2: 2,3: 2,4: 2,5: 2,6: 2,7: 2,8: 2,9: 2,10: 2,11: 2,12: 2,13: 2,14: 2,15: 2,16: 2}
+# inst_offset = {1: 0, 3: 2, 5: 4, 10: 6, 13: 8, 14: 7}
 
 # mid = mido.MidiFile('midi/maria1.mid')
 # state = {"time_div": 750, "vol_scale": 1}
@@ -19,11 +19,11 @@ import sys
 
 # mid = mido.MidiFile('midi/marioOverworld.mid')
 # state = {"time_div": 300, "vol_scale": 1}
-# inst_offset = {1: 2, 2: 2, 3: 2, 4: 2, 5: 2, 6: 2}
+# # inst_offset = {1: 2, 2: 2, 3: 2, 4: 2, 5: 2, 6: 2}
 # inst_offset = {1: 0, 2: 1, 3: 2, 4: 3, 5: 4, 6: 5}
 
-mid = mido.MidiFile('midi/marioGustyGarden.mid')
-state = {"time_div": 250, "vol_scale": 1}
+# mid = mido.MidiFile('midi/marioGustyGarden.mid')
+# state = {"time_div": 250, "vol_scale": 1}
 # inst_offset = {4: 2, 13: 2}
 # inst_offset = {1: 2,2: 2,3: 2,4: 2,5: 2,6: 2,7: 2,8: 2,9: 2,10: 2,11: 2,12: 2,13: 2,14: 2,15: 2,16: 2}
 
@@ -32,7 +32,7 @@ state = {"time_div": 250, "vol_scale": 1}
 # time_div = 1500
 # inst_offset = {0: 0, 1: 1, 2: 2, 4: 4, 5: 5}
 
-ser = serial.Serial('/dev/cu.usbmodem14101', 500000)
+ser = serial.Serial('/dev/cu.usbmodem14301', 500000)
 
 msgs = {}
 sums = {}
